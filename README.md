@@ -1,5 +1,5 @@
 # Molecular dynamics simulation of nitrogen diffusion in iron and iron nitrides using *ab initio* data trained machine learning potentials
-
+[![DOI](https://zenodo.org/badge/1132680639.svg)](https://doi.org/10.5281/zenodo.18220490)
 This repository contains the data, trained model, and example workflows **related to the paper**:  
 **“Molecular dynamics simulation of nitrogen diffusion in iron and iron nitrides using ab initio data trained machine learning potentials.”** 
 
