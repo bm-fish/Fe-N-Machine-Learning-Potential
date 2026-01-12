@@ -1,0 +1,92 @@
+#lammps
+variable        TEMP            equal 1000
+variable	input_stu	string CONTCAR_07_fe12N5_mp27908_sup223_oct1234Np4_334
+variable	skip_hiTdiso	equal false
+
+units           metal
+boundary        p p p 
+atom_style      atomic
+neighbor        1.0 bin
+neigh_modify 	every 2 delay 4 check yes
+box 		tilt large
+read_data  ${input_stu}
+ 
+pair_style      deepmd ../01.deepmd_train_example/deepmd_potential.pb
+pair_coeff      * *
+
+
+group           Fes type 1
+group           Ns type 2
+ 
+timestep        0.001
+velocity        all create ${TEMP} 4928459 dist gaussian
+#fix             1 all npt temp 1550 1550 0.1 iso 0 0 0.2
+ 
+#dump            npt_rlx_traj all custom 100 npt_rlx_traj.dat id type x y z
+#dump_modify 	npt_rlx_traj sort id
+#dump            melt all custom 1000 dump.atom.slow tag type xu yu zu vx vy vz  sxx syy szz
+#restart         100000  restart.*
+
+thermo_style    custom step temp pe ke etotal press vol lx ly lz xy xz yz
+thermo          100
+
+#fix output all print 50 "${step},${temp},${vol}" file thermal_output.txt
+#thermo_style    custom step temp etotal pe press vol pxx pyy pzz pyz pxz pxy
+
+# variable vol equal lx*ly*lz*sqrt(1 + (xy/lx)^2 + (xz/lx)^2 + (yz/ly)^2 - 2*xy*xz*yz/(lx^2*ly))
+# fix output all print 100 "Time: ${time} Volume: \${vol}" file triclinic_volume.txt screen no
+fix   	     	 npt_rlx all npt temp ${TEMP} ${TEMP} $(100.0*dt) tri 1.01325 1.01325 $(1000.0*dt)
+#fix             1 all nvt temp ${TEMP} ${TEMP} $(100.0*dt)
+run		 20000
+write_data       npt.data
+#undump		 npt_rlx_traj
+write_dump 	 all atom npt.atom modify sort id
+unfix		 npt_rlx
+
+if "${skip_hiTdiso}" then "jump SELF end_of_hiTdiso"
+thermo		 100
+dump            nvt_hiTdiso_traj all custom 100 nvt_hiTdiso_traj.dat id type xu yu zu
+dump_modify     nvt_hiTdiso_traj sort id
+
+fix             nvt_heat all nvt temp ${TEMP} 1500 $(100.0*dt)
+run              20000
+unfix		nvt_heat
+fix             nvt_diso all nvt temp 1500 1500 $(100.0*dt)
+run		 20000
+unfix		nvt_diso
+fix             nvt_cool all nvt temp 1500 ${TEMP} $(100.0*dt)
+run		 20000
+unfix		 nvt_cool
+undump          nvt_hiTdiso_traj
+#undump melt
+write_dump       all atom nvt_hiTdiso_traj_final.atom modify sort id
+write_data       nvt_hiTdiso_traj_final.data
+
+label 		 end_of_hiTdiso
+
+reset_timestep 0
+
+# unfix   1
+fix             nvt_msd all nvt temp ${TEMP} ${TEMP} $(100.0*dt)
+#Output MSD
+compute msdfe Fes msd com yes   #MSD
+compute msdn  Ns  msd com yes
+#compute thermo_temp all temp
+dump            diff_traj all custom 1000 diff_traj.dat id type xu yu zu
+dump_modify     diff_traj sort id
+fix savemsd all ave/time 100 1 100 c_thermo_temp c_msdn[1] c_msdn[2] c_msdn[3] c_msdn[4] c_msdfe[1] c_msdfe[2] c_msdfe[3] c_msdfe[4] file msd.data mode scalar
+thermo	    	1000
+
+run             2000000
+write_restart   diff.restart.proc.%.* nfile 8
+run             2000000
+write_restart   diff.restart.proc.%.* nfile 8
+run             2000000
+write_restart   diff.restart.proc.%.* nfile 8
+undump		diff_traj
+
+#run             44000 
+#unfix           1
+#fix 1     all nph iso 0.0 0.0 0.2  
+#run             100000
+write_data 	 final.data

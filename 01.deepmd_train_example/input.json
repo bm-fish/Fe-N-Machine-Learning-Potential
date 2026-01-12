@@ -1,0 +1,117 @@
+{
+    "_comment": " model parameters",
+    "model": {
+	"type_map":	["Fe", "N"],
+	"descriptor" :{
+	    "type":		"se_e2_a",
+	    "sel":              [70,48],
+	    "rcut_smth":	0.50,
+	    "rcut":		5.00,
+	    "neuron":		[30, 60, 120],
+	    "resnet_dt":	false,
+		"type_one_side": false,
+	    "axis_neuron":	16,
+	    "seed":		114514,
+		"activation_function": "tanh",
+	    "_comment":		" that's all"
+	},
+	"fitting_net" : {
+	    "neuron":		[220, 220, 220],
+	    "resnet_dt":	true,
+	    "seed":		114514,
+	    "_comment":		" that's all"
+	},
+	"data_stat_nbatch": 10,
+	"_comment":	" that's all"
+    },
+
+    "learning_rate" :{
+	"type":		"exp",
+	"decay_steps":	5000,
+	"start_lr":	0.001,	
+	"stop_lr":	3.51e-8,
+	"_comment":	"that's all"
+    },
+
+    "loss" :{
+	"type":		"ener",
+	"start_pref_e":	0.02,
+	"limit_pref_e":	1,
+	"start_pref_f":	1000,
+	"limit_pref_f":	1,
+	"start_pref_v":	0,
+	"limit_pref_v":	0,
+	"_comment":	" that's all"
+    },
+
+    "training" : {
+	"training_data": {
+	    "_set_prefix":       "../../database/",
+	    "systems":		[
+						"../00.data/01_fe_mp13/train/T1500eq","../00.data/01_fe_mp13/train/T1000eq","../00.data/01_fe_mp13/train/T500eq",
+		                	"../00.data/01_fe_mp13/train/T1000_Np1", "../00.data/01_fe_mp13/train/T1000_Np2",
+							"../00.data/01_fe_mp13/train/bmeq_095_T1000","../00.data/01_fe_mp13/train/bmeq_105_T1000",
+						
+						"../00.data/03_fe_mp150/train/T1500eq","../00.data/03_fe_mp150/train/T1000eq","../00.data/03_fe_mp150/train/T500eq",
+							"../00.data/03_fe_mp150/train/T1000_Np2","../00.data/03_fe_mp150/train/T1000_Np4",
+							"../00.data/03_fe_mp150/train/bmeq_095_T1000","../00.data/03_fe_mp150/train/bmeq_105_T1000",
+
+						"../00.data/04_fe8n_mp555/train/T1500eq","../00.data/04_fe8n_mp555/train/T1000eq","../00.data/04_fe8n_mp555/train/T500eq",
+							"../00.data/04_fe8n_mp555/train/T1000_Nm2", "../00.data/04_fe8n_mp555/train/T1000_Np2",
+		"../00.data/04_fe8n_mp555/train/bmeq_105_T1000","../00.data/04_fe8n_mp555/train/bmeq_095_T1000_1","../00.data/04_fe8n_mp555/train/bmeq_095_T1000_2",
+							
+						"../00.data/05_fe4n_mp535/train/T1500eq","../00.data/05_fe4n_mp535/train/T1000eq","../00.data/05_fe4n_mp535/train/T500eq",
+							"../00.data/05_fe4n_mp535/train/T1000_Nm2","../00.data/05_fe4n_mp535/train/T1000_Np2",
+							"../00.data/05_fe4n_mp535/train/bmeq_095_T1000","../00.data/05_fe4n_mp535/train/bmeq_105_T1000",
+
+						"../00.data/06_fe3n_mp1804/train/T1500eq","../00.data/06_fe3n_mp1804/train/T1000eq","../00.data/06_fe3n_mp1804/train/T500eq",
+							"../00.data/06_fe3n_mp1804/train/T1000_Nm2","../00.data/06_fe3n_mp1804/train/T1000_Np2",
+							"../00.data/06_fe3n_mp1804/train/bmeq_095_T1000","../00.data/06_fe3n_mp1804/train/bmeq_105_T1000",
+						
+						"../00.data/07_fe12N5_mp27908/train/T1500eq","../00.data/07_fe12N5_mp27908/train/T1000eq","../00.data/07_fe12N5_mp27908/train/T500eq",
+							"../00.data/07_fe12N5_mp27908/train/T1000_Nm4","../00.data/07_fe12N5_mp27908/train/T1000_Np4",
+							"../00.data/07_fe12N5_mp27908/train/bmeq_095_T1000","../00.data/07_fe12N5_mp27908/train/bmeq_103_T1000",
+
+						"../00.data/08_fe2n_mp21476/train/T1500eq","../00.data/08_fe2n_mp21476/train/T1000eq","../00.data/08_fe2n_mp21476/train/T500eq",
+							"../00.data/08_fe2n_mp21476/train/bmeq_095_T1000",
+							"../00.data/08_fe2n_mp21476/train/bmeq_105_T1000_1","../00.data/08_fe2n_mp21476/train/bmeq_105_T1000_2",
+
+		                "../00.data/09_fe2n_2_mp248/train/T1500eq","../00.data/09_fe2n_2_mp248/train/T1000eq","../00.data/09_fe2n_2_mp248/train/T500eq",
+							"../00.data/09_fe2n_2_mp248/train/T1000_Nm2","../00.data/09_fe2n_2_mp248/train/T1000_Np2",
+							"../00.data/09_fe2n_2_mp248/train/bmeq_095_T1000","../00.data/09_fe2n_2_mp248/train/bmeq_105_T1000",
+						
+						"../00.data/10_fen_mp12120/train/T1500eq","../00.data/10_fen_mp12120/train/T1000eq","../00.data/10_fen_mp12120/train/T500eq",
+							"../00.data/10_fen_mp12120/train/bmeq_095_T1000","../00.data/10_fen_mp12120/train/bmeq_105_T1000",
+
+						"../00.data/11_fen_mp6988/train/T1500eq","../00.data/11_fen_mp6988/train/T1000eq","../00.data/11_fen_mp6988/train/T500eq",
+							"../00.data/11_fen_mp6988/train/bmeq_095_T1000","../00.data/11_fen_mp6988/train/bmeq_105_T1000"
+	                         ],
+	    "batch_size":	"auto",
+		"auto_prob":    "prob_sys_size",
+	    "_comment":		"that's all"
+	},
+	"validation_data":{
+	    "_set_prefix":       "../../database",
+	    "systems":		[
+                "../00.data/03_fe_mp150/test/T1500eq",
+				"../00.data/05_fe4n_mp535/test/T1500eq","../00.data/05_fe4n_mp535/test/T1000_Nm2","../00.data/05_fe4n_mp535/test/T1000_Np2",
+				"../00.data/05_fe4n_mp535/test/bmeq_095_T1000","../00.data/05_fe4n_mp535/test/bmeq_105_T1000",
+				"../00.data/06_fe3n_mp1804/test/T1500eq","../00.data/06_fe3n_mp1804/test/T1000_Nm2","../00.data/06_fe3n_mp1804/test/T1000_Np2",
+				"../00.data/06_fe3n_mp1804/test/bmeq_095_T1000","../00.data/06_fe3n_mp1804/test/bmeq_105_T1000",
+				"../00.data/09_fe2n_2_mp248/test/T1500eq"
+	                        ],
+	    "batch_size":	"auto",
+	    "numb_btch":	10,
+	    "_comment":		"that's all"
+	},
+	"numb_steps":	1000000,
+	"seed":		10,
+	"disp_file":	"lcurve.out",
+	"disp_freq":	1000,
+	"save_freq":	20000,
+	"_comment":	"that's all"
+    },    
+
+    "_comment":		"that's all"
+}
+
